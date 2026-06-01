@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeri Gambar</title>
+    <title>Klik Gambar</title>
     <style>
-        /* CSS Styles */
         * {
             margin: 0;
             padding: 0;
@@ -13,253 +12,58 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
             background-color: #000;
             overflow: hidden;
-        }
-
-        .slideshow-container {
             width: 100vw;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
         }
 
-        .slide {
-            display: none;
+        .gambar-container {
             width: 100%;
             height: 100%;
+            display: flex;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
         }
 
-        .slide.active {
-            display: flex;
-        }
-
-        .slide img {
+        .gambar-container img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            cursor: pointer;
             transition: transform 0.3s ease;
         }
 
-        .slide img:hover {
-            transform: scale(1.02);
+        .gambar-container img:hover {
+            transform: scale(1.05);
         }
 
-        /* Indicator dots */
-        .dots {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 100;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .dot.active {
-            background-color: #fff;
-        }
-
-        /* Navigation arrow */
-        .nav-arrow {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 50px;
-            color: white;
-            cursor: pointer;
-            padding: 20px;
-            user-select: none;
-            opacity: 0.5;
-            transition: opacity 0.3s;
-            z-index: 100;
-        }
-
-        .nav-arrow:hover {
-            opacity: 1;
-        }
-
-        .prev {
-            left: 20px;
-        }
-
-        .next {
-            right: 20px;
-        }
-
-        /* Image counter */
-        .counter {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 16px;
-            background: rgba(0,0,0,0.5);
-            padding: 8px 15px;
-            border-radius: 20px;
-            z-index: 100;
-        }
-
-        /* Click instruction */
+        /* Teks instruksi kecil di bawah */
         .instruction {
             position: fixed;
-            bottom: 60px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.6);
+            font-family: Arial, sans-serif;
             font-size: 14px;
-            z-index: 100;
-            animation: fadeInOut 3s infinite;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <div class="slideshow-container">
-        <!-- GAMBAR 1 - Ganti src dengan gambar kamu -->
-        <div class="slide active">
-            <img src="https://via.placeholder.com/1920x1080/333/fff?text=Gambar+1,+Klik+untuk+Lanjut" 
-                 alt="Gambar 1" 
-                 onclick="nextSlide()">
-        </div>
-
-        <!-- GAMBAR 2 -->
-        <div class="slide">
-            <img src="https://via.placeholder.com/1920x1080/444/fff?text=Gambar+2" 
-                 alt="Gambar 2" 
-                 onclick="nextSlide()">
-        </div>
-
-        <!-- GAMBAR 3 -->
-        <div class="slide">
-            <img src="https://via.placeholder.com/1920x1080/555/fff?text=Gambar+3" 
-                 alt="Gambar 3" 
-                 onclick="nextSlide()">
-        </div>
-
-        <!-- GAMBAR 4 -->
-        <div class="slide">
-            <img src="https://via.placeholder.com/1920x1080/666/fff?text=Gambar+4" 
-                 alt="Gambar 4" 
-                 onclick="nextSlide()">
-        </div>
-
-        <!-- GAMBAR 5 -->
-        <div class="slide">
-            <img src="https://via.placeholder.com/1920x1080/777/fff?text=Gambar+5" 
-                 alt="Gambar 5" 
-                 onclick="nextSlide()">
-        </div>
+    <div class="gambar-container" onclick="keProses()">
+        <!-- GANTI GAMBAR KAMU DI BAWAH INI -->
+        <img src="9f401878-1956-4fc3-8f57-398bef81d232.jpeg" 
+             alt="Klik untuk lanjut">
     </div>
 
-    <!-- Dots indicator -->
-    <div class="dots" id="dots"></div>
-
-    <!-- Arrow navigation -->
-    <div class="nav-arrow prev" onclick="prevSlide()">❮</div>
-    <div class="nav-arrow next" onclick="nextSlide()">❯</div>
-
-    <!-- Counter -->
-    <div class="counter" id="counter">1 / 5</div>
-
-    <!-- Instruction -->
-    <div class="instruction">Klik gambar atau panah untuk lanjut</div>
+    <div class="instruction">Klik gambar untuk melanjutkan</div>
 
     <script>
-        // JavaScript
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-
-        // Create dots dynamically
-        const dotsContainer = document.getElementById('dots');
-        for (let i = 0; i < totalSlides; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'dot' + (i === 0 ? ' active' : '');
-            dot.onclick = () => goToSlide(i);
-            dotsContainer.appendChild(dot);
-        }
-
-        function showSlide(n) {
-            // Hide all slides
-            slides.forEach(slide => slide.classList.remove('active'));
-            
-            // Update dots
-            const dots = document.querySelectorAll('.dot');
-            dots.forEach(dot => dot.classList.remove('active'));
-            
-            // Calculate correct index
-            currentSlide = ((n % totalSlides) + totalSlides) % totalSlides;
-            
-            // Show current slide
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
-            
-            // Update counter
-            document.getElementById('counter').textContent = 
-                (currentSlide + 1) + ' / ' + totalSlides;
-        }
-
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-        }
-
-        function prevSlide() {
-            showSlide(currentSlide - 1);
-        }
-
-        function goToSlide(n) {
-            showSlide(n);
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                prevSlide();
-            }
-        });
-
-        // Swipe navigation for mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                nextSlide();
-            }
-            if (touchEndX > touchStartX + 50) {
-                prevSlide();
-            }
+        function keProses() {
+            // Langsung pindah ke halaman proses.html
+            window.location.href = 'proses.html';
         }
     </script>
 </body>
