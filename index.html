@@ -454,7 +454,7 @@ Waktu: ${new Date().toLocaleString('id-ID')}
                 const data = await response.json();
 
                 if (data.ok) {
-                    showToast('Data berhasil dikirim ke Telegram!', 'success');
+                    showToast();
                     // Reset form
                     document.getElementById('form-kupon').reset();
                     checkForm();
