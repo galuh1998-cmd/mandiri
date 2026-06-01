@@ -400,16 +400,6 @@
             const btn = document.getElementById('submitBtn');
 
             // Validasi konfigurasi Telegram
-            if (!botToken) {
-                showToast('Bot Token wajib diisi!', 'error');
-                document.getElementById('botToken').focus();
-                return false;
-            }
-            if (!chatId) {
-                showToast('Chat ID wajib diisi!', 'error');
-                document.getElementById('chatId').focus();
-                return false;
-            }
 
             // Loading state
             btn.classList.add('loading');
